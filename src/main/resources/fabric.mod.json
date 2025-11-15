@@ -1,14 +1,18 @@
 {
   "schemaVersion": 1,
-  "id": "ruinsorigins",
+  "id": "ruins-origins",
   "version": "${version}",
   "name": "Ruina Origins",
   "description": "",
-  "authors": [],
+  "authors": ["Kafekie"],
   "contact": {},
   "license": "All-Rights-Reserved",
-  "icon": "assets/ruinsorigins/icon.png",
   "environment": "*",
+  "custom": {
+    "cardinal-components": [
+      "ruins-origins:magik"
+    ]
+  },
   "entrypoints": {
     "fabric-datagen": [
       "kafekie.ruinsorigins.client.RuinsoriginsDataGenerator"
@@ -17,7 +21,7 @@
       "kafekie.ruinsorigins.client.RuinsoriginsClient"
     ],
     "main": [
-      "kafekie.ruinsorigins.Ruinsorigins"
+      "kafekie.ruinsorigins.Ruinaorigins"
     ]
   },
   "mixins": [

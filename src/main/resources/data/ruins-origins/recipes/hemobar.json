@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:rotten_flesh"
+    },
+    {
+      "tag": "ruins-origins:raw_meat"
+    },
+    {
+      "tag": "ruins-origins:raw_meat"
+    }
+  ],
+  "result": {
+    "item": "ruins-origins:hemobar",
+    "count": 1
+  }
+}
