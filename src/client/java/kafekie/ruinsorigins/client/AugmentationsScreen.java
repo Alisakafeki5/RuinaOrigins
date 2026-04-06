@@ -10,12 +10,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class AugmentationsScreen extends HandledScreen<AugmentationsScreenHandler> {
-    private static final Identifier TEXTURE = new Identifier("ruins-origins", "textures/gui/augmentations_gui.png");
+    private static final Identifier TEXTURE = new Identifier("ruins-origins", "textures/gui/augmentations_gui2.png");
 
     public AugmentationsScreen(AugmentationsScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         this.backgroundWidth = 176;
-        this.backgroundHeight = 198;
+        this.backgroundHeight = 204;
     }
 
     @Override

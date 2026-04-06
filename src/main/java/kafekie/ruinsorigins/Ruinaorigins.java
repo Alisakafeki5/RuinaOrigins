@@ -1,21 +1,18 @@
 package kafekie.ruinsorigins;
 
-import io.github.apace100.apoli.registry.ApoliRegistries;
-import kafekie.ruinsorigins.augmentations.AugmentationsCommand;
-import kafekie.ruinsorigins.augmentations.AugmentationsHolder;
-import kafekie.ruinsorigins.augmentations.AugmentationsScreenHandler;
+import kafekie.ruinsorigins.augmentations.*;
 import kafekie.ruinsorigins.items.AugmentationsItems;
 import kafekie.ruinsorigins.items.Bolus;
 import kafekie.ruinsorigins.power.condition.AugmentationConditionRegistration;
-import kafekie.ruinsorigins.power.condition.AugmentationsInventoryCondition;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
-import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.item.FoodComponents;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
@@ -23,7 +20,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Ruinaorigins implements ModInitializer {
-    public static ScreenHandlerType<AugmentationsScreenHandler> AUGMENTATIONS_SCREEN_HANDLER;
+
+    public static final ScreenHandlerType<AugmentationsScreenHandler> AUGMENTATIONS_SCREEN_HANDLER =
+            Registry.register(
+                    Registries.SCREEN_HANDLER,
+                    new Identifier("ruins-origins", "augmentations"),
+                    new ScreenHandlerType<>(
+                            AugmentationsScreenHandler::new,
+                            FeatureSet.empty()
+                    )
+            );
+
+
+
     public static final Logger LOGGER = LoggerFactory.getLogger("ruins-origins");
 
     public static final Item HEMOBAR = new Item(new Item.Settings().food(FoodComponents.ROTTEN_FLESH));
@@ -60,6 +69,9 @@ public class Ruinaorigins implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        AugmentationsPackets.registerServer();
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA)
+                .registerReloadListener(new AugmentationsInsert.WorkshopLoader());
 
         AugmentationConditionRegistration.register();
 
@@ -94,12 +106,12 @@ public class Ruinaorigins implements ModInitializer {
         Registry.register(Registries.ITEM, new Identifier("ruins-origins", "thumb_logo"), THUMB);
         Bolus.registerModItems();
         AugmentationsItems.registerModItems();
-        AUGMENTATIONS_SCREEN_HANDLER = Registry.register(
-                Registries.SCREEN_HANDLER, new Identifier("ruins-origins", "augmentations_screen_handler"), new ScreenHandlerType<>(AugmentationsScreenHandler::new, FeatureSet.empty())
+        CommandRegistrationCallback.EVENT.register(
+                (dispatcher, registryAccess, environment) -> {
+                    AugmentationsCommand.register(dispatcher);
+                }
         );
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            AugmentationsCommand.register(dispatcher);
-        });
+
         ServerPlayerEvents.COPY_FROM.register((oldPlayer, newPlayer, alive) -> {
             if (!alive) {
                 var oldAug = ((AugmentationsHolder) oldPlayer).getAugmentations();

@@ -7,3 +7,4 @@ public enum AugmentationsTypes {
     TATTOO,
     IMPLANT
 }
+
